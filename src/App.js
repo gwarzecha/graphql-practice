@@ -1,16 +1,16 @@
 import logo from "./logo.svg";
 import "./App.css";
-
 import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider, Query } from "react-apollo";
 // takes query strings and converts them into something we can use
 import gql from "graphql-tag";
 
+// Connects our site to the GraphQL API
 const client = new ApolloClient({
   uri: "https://api-us-west-2.graphcms.com/v2/ckqbj4j9t5jbc01z10krle140/master",
 });
 
-const testQuery = gql`
+const POSTS_QUERY = gql`
   {
     posts {
       id
@@ -20,11 +20,11 @@ const testQuery = gql`
   }
 `;
 
-client
-  .query({
-    query: testQuery,
-  })
-  .then((res) => console.log(res));
+// client
+//   .query({
+//     query: testQuery,
+//   })
+//   .then((res) => console.log(res));
 
 function App() {
   return (
@@ -32,18 +32,15 @@ function App() {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
         </header>
+        <Query query={POSTS_QUERY}>
+          {({ loading, data }) => {
+            if (loading) return "Loading...";
+            // equivalent to saying data.posts, but we're actually pulling the posts var out of the data object
+            const { posts } = data;
+            return posts.map((post) => <h1>{post.title}</h1>);
+          }}
+        </Query>
       </div>
     </ApolloProvider>
   );
