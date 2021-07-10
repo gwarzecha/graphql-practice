@@ -2,8 +2,9 @@ import logo from "./logo.svg";
 import "./App.css";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Post from "./Posts/Post";
+import NewPost from "./Posts/NewPost";
 import Posts from "./Posts/Posts";
 
 // Connects our site to the GraphQL API
@@ -23,10 +24,16 @@ function App() {
       <Router>
         <div className="App">
           <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
+            <Link to={"/"}>
+              <h1 className="App-title">GraphQL Blog</h1>
+            </Link>
           </header>
+
+          <Link to={"/post/new"}>New Post</Link>
+
           <Switch>
             <Route exact path="/" component={Posts} />
+            <Route exact path="/post/new" component={NewPost} />
             <Route path="/post/:id/" component={Post} />
           </Switch>
         </div>
